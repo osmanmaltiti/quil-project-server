@@ -6,11 +6,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-mongoose.connect('mongodb://localhost:27017/quilDB');
+const databaseURL = "mongodb+srv://osmanmaltiti:heroo1088@quil.iwpbl.mongodb.net/quilDB?retryWrites=true&w=majority" 
+
+mongoose.connect(databaseURL);
 
 app.use(express.json());
 app.use('/user', user);
 
+app.get('/', (req, res) => {
+  res.send("Hello there Maltiti")
+});
 
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
