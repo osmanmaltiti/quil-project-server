@@ -149,7 +149,7 @@ router.patch('/quil/like/:quilID', async(req, res) => {
     Quil.findOne({_id: quilID}, async(err, quilData) => {
       if(err){ console.log(err) }
       else{
-        let likes = quilData.likes ? [...quilData.likes, uid] : [uid]
+        let likes = quilData?.likes ? [...quilData.likes, uid] : [uid]
         const newLikes = {
           likes: [...new Set(likes)],
           unlikes: [...quilData.unlikes.filter(item => item !== uid)]
@@ -171,7 +171,7 @@ router.patch('/quil/unlike/:quilID', async(req, res) => {
     Quil.findOne({_id: quilID}, async(err, quilData) => {
       if(err){ console.log(err) }
       else{
-        const unlikes = quilData.unlikes? [...quilData.unlikes, uid] : [uid]
+        const unlikes = quilData?.unlikes? [...quilData.unlikes, uid] : [uid]
         const newUnlikes = {
           unlikes: [...new Set(unlikes)],
           likes: [...quilData.likes.filter(item => item !== uid)]
@@ -237,12 +237,12 @@ router.patch('/follow/:uid', (req, res) => {
   }
   else{
     User.findOne({uid: userId}, async(err, data) => {
-      let newFollowers = data.followers ? [...data.followers, uid] : [uid];
+      let newFollowers = data?.followers ? [...data.followers, uid] : [uid];
       await User.updateOne({uid: userId}, {followers: [...new Set(newFollowers)]});
       
       User.findOne({uid}, async(err, userData) => {
         if(err) res.status(404).send(err)
-        let newFollowing = userData.following ? [...userData.following, userId] : [userId]
+        let newFollowing = userData?.following ? [...userData.following, userId] : [userId]
         await User.updateOne({uid}, {following: newFollowing})
       })
       res.status(201).send("Following")
@@ -257,7 +257,7 @@ router.patch('/unfollow/:uid', (req, res) => {
     if(err) {console.log(err)}
     else{
       const [data] = result;
-      const newFollowers = data.followers.filter(item => item.uid !== uid);
+      const newFollowers = data?.followers.filter(item => item.uid !== uid);
       
       await User.updateOne({uid: followingId}, {followers: newFollowers});
     
@@ -266,7 +266,7 @@ router.patch('/unfollow/:uid', (req, res) => {
       if(err) {console.log(err)}
       else{
         const [data] = result;
-        const newFollowing = data.following.filter(item => item.followingId !== followingId);
+        const newFollowing = data?.following.filter(item => item.followingId !== followingId);
         
         await User.updateOne({uid}, {following: newFollowing});
       }
